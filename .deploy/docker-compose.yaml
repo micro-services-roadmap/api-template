@@ -1,0 +1,13 @@
+version: '3.1'
+services:
+  api-api-admin-dev:
+    image: registry.cn-shanghai.aliyuncs.com/alice52/wpp-api-admin-go1.20.x:20240530.9953bdb
+    restart: 'always'
+    container_name: api-api-admin-dev
+    volumes:
+      - /root/wpp/api-admin/log:/app/log
+    environment:
+      JASYPT_ENCRYPTOR_PASSWORD: ZACK_KEY
+      config: etc/admin-api-staging.yaml
+    extra_hosts:
+      - 'host.docker.internal:172.17.0.1'

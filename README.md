@@ -1,13 +1,26 @@
-## gz-template
+## biz
 
-this will show how to use go-zero generate standalone application
+## develop
 
-## feature
+1. 设置私有仓库
 
-1. rest api
-2. rpc service
-3. **gorm-gen**
-4. **jwt parser**
-5. **jasypt**
-6. ~~vipperx~~
-7. ~~zapx~~
+   ```shell
+   go env -w GOPRIVATE="github.com/wordpress-plus"
+   ```
+
+2. 使用 `.deploy/goctl` 目录进行相关业务逻辑的生成
+
+   ```shell
+   rm -rf internal/types && rm -rf internal/handler && goctl api go -api ./doc/api/app.api -dir ./ --home=./.deploy/goctl/1.6.5
+   ```
+
+3. 生成 swagger 文档
+
+   ```shell
+   # go install github.com/zeromicro/goctl-swagger@latest
+   goctl api plugin -plugin goctl-swagger="swagger -filename ./doc/swagger/swagger.json" -api ./doc/api/app.api -dir .
+   ```
+
+4. 填充相关业务逻辑
+
+   - /internal/logic/xxx

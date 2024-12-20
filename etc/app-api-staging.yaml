@@ -1,0 +1,19 @@
+Name: app-api
+Host: 0.0.0.0
+Port: 8888
+Mode: test
+Timeout: 50000
+
+Log:
+  ServiceName: api-admin
+  Mode: console #file
+  Encoding: plain #json
+  Level: debug
+  Stat: false
+  KeepDays: 30
+
+TracingRpc:
+  Endpoints:
+    - 127.0.0.1:8889
+  NonBlock: true
+  Timeout: 10000

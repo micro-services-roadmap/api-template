@@ -1,0 +1,11 @@
+Name: app-api
+Host: 0.0.0.0
+Port: 8888
+Mode: pro
+Timeout: 50000
+
+TracingRpc:
+  Endpoints:
+    - 127.0.0.1:8889
+  NonBlock: true
+  Timeout: 10000

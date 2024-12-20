@@ -1,0 +1,62 @@
+name: Build Wpp-Api-App Image
+
+on:
+  workflow_dispatch:
+  release:
+    types: [released]
+  push:
+  pull_request:
+
+concurrency:
+  group: ${{ github.event_name }}-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: ['ubuntu-latest'] # "macOS-latest"
+        go: ['1.22.x'] # '1.19.x', '1.21.x'
+    runs-on: ${{ matrix.os }}
+    env:
+      GOPRIVATE: github.com/wordpress-plus
+      GH_PRIVATE_TOKEN: ${{ secrets.GH_PRIVATE_TOKEN }}
+      IMAGE_PREFIX: wpp-api-app
+    if: "contains(github.event.head_commit.message, '[image]') || github.event_name == 'workflow_dispatch'"
+    steps:
+      - name: Export Global Var
+        run: |
+          echo "ALI_DOCKER_REGISTRY=${{ secrets.ALI_DOCKER_HUB_REGISTRY }}" >> $GITHUB_ENV
+          echo "ALI_DOCKER_USERNAME=${{ secrets.ALI_DOCKER_REGISTRY_USERNAME }}" >> $GITHUB_ENV
+          echo "ALI_DOCKER_PASSWORD=${{ secrets.ALI_DOCKER_REGISTRY_PASSWORD }}" >> $GITHUB_ENV
+          echo "PROJECT_HOME=$PWD" >> $GITHUB_ENV
+          echo "TAG=`echo \`date +%Y%m%d\`.${GITHUB_SHA} | cut -c1-16`" >> $GITHUB_ENV
+
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - uses: WillAbides/setup-go-faster@v1.12.0
+        with:
+          go-version: ${{ matrix.go }}
+
+      - run: git config --global url.https://$GH_PRIVATE_TOKEN@github.com/.insteadOf https://github.com/
+
+      - name: Cache dependencies
+        uses: actions/cache@v2
+        with:
+          path: |
+            ${{ env.GOPATH }}/pkg/mod
+          key: go-${{ runner.os }}-${{ hashFiles('**/go.sum') }}
+          restore-keys: |
+            go-${{ runner.os }}-
+
+      - name: Build Archive Of Api-App Then Push Image
+        run: |
+          branch=$(echo ${GITHUB_REF#refs/heads/})
+          image=$IMAGE_PREFIX-go${{ matrix.go }}-${branch}:${TAG}
+          docker build -f Dockerfile  --build-arg GH_PRIVATE_TOKEN=$GH_PRIVATE_TOKEN -t ${image} .
+          docker login --username=$ALI_DOCKER_USERNAME --password=$ALI_DOCKER_PASSWORD $ALI_DOCKER_REGISTRY
+          docker tag $image $ALI_DOCKER_REGISTRY/alice52/$image
+          docker push $ALI_DOCKER_REGISTRY/alice52/$image
+          echo "image:" ${image}

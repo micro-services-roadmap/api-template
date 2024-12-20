@@ -1,0 +1,8 @@
+import "actuator/health.api"
+
+info (
+	desc:   "app"
+	author: "alice52"
+	email:  "zzhang_xz@163.com"
+)
+

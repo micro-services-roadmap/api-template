@@ -1,0 +1,61 @@
+name: Build Wpp-Api-App Archive
+
+on:
+  workflow_dispatch:
+  release:
+    types: [released]
+  push:
+  pull_request:
+
+concurrency:
+  group: ${{ github.event_name }}-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: ['ubuntu-latest'] # "macOS-latest"
+        go: ['1.22.x', '1.21.x'] #'1.19.x',
+    runs-on: ${{ matrix.os }}
+    env:
+      GOPRIVATE: github.com/wordpress-plus
+      GH_PRIVATE_TOKEN: ${{ secrets.GH_PRIVATE_TOKEN }}
+    if: "!contains(github.event.head_commit.message, 'ci skip') && !contains(github.event.head_commit.message, '[image]')"
+    steps:
+      - name: Export Global Var
+        run: |
+          echo "PROJECT_HOME=$PWD" >> $GITHUB_ENV
+
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - uses: WillAbides/setup-go-faster@v1.12.0
+        with:
+          go-version: ${{ matrix.go }}
+
+      - run: git config --global url.https://$GH_PRIVATE_TOKEN@github.com/.insteadOf https://github.com/
+
+      - name: Cache dependencies
+        uses: actions/cache@v2
+        with:
+          path: |
+            ${{ env.GOPATH }}/pkg/mod
+          key: go-${{ runner.os }}-${{ hashFiles('**/go.sum') }}
+          restore-keys: |
+            go-${{ runner.os }}-
+
+      - name: Download Dependencies
+        run: |
+          go get -v -t -d ./...
+          if [ -f Gopkg.toml ]; then
+              curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
+              dep ensure
+          fi
+        working-directory: ./
+
+      - name: Test and Build
+        run: |
+          go build -v -race
+        working-directory: ./

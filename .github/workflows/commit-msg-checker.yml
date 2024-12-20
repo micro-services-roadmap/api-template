@@ -2,7 +2,11 @@
 
 name: Conventional Commit Lint
 
-on: [ push, pull_request ]
+on: [push, pull_request]
+
+concurrency:
+  group: ${{ github.event_name }}-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   commit-lint:

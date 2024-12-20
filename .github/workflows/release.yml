@@ -21,7 +21,19 @@ jobs:
         with:
           node-version: 20
 
+      - name: Get current tag
+        id: get_tag
+        run: echo "CURRENT_TAG=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
+
+      - name: Set tag suffix if on develop branch
+        id: set_suffix
+        run: echo "TAG_SUFFIX=$(if [ '${{ env.BRANCH_NAME }}' == 'develop' ]; then echo '-beta'; else echo ''; fi)" >> $GITHUB_ENV
+
+      - name: Create new tag with suffix
+        id: create_tag
+        run: echo "NEW_TAG=${{ env.CURRENT_TAG }}${{ env.TAG_SUFFIX }}" >> $GITHUB_ENV
+
       - name: Release
-        run: npx changelogithub
+        run: npx changelogithub --tag $NEW_TAG
         env:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}

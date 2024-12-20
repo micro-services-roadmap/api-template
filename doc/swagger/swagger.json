@@ -1,0 +1,66 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "",
+    "description": "app",
+    "version": ""
+  },
+  "schemes": [
+    "http",
+    "https"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/api/actuator/health/add-collection": {
+      "get": {
+        "operationId": "HealthCheck",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/HealthCheckResp"
+            }
+          }
+        },
+        "tags": [
+          "server/actuator"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "HealthCheckResp": {
+      "type": "object",
+      "properties": {
+        "appstatus": {
+          "type": "string"
+        },
+        "rdsstatus": {
+          "type": "string"
+        },
+        "kvstatus": {
+          "type": "string"
+        }
+      },
+      "title": "HealthCheckResp",
+      "required": [
+        "appstatus",
+        "rdsstatus",
+        "kvstatus"
+      ]
+    }
+  },
+  "securityDefinitions": {
+    "apiKey": {
+      "type": "apiKey",
+      "description": "Enter JWT Bearer token **_only_**",
+      "name": "Authorization",
+      "in": "header"
+    }
+  }
+}

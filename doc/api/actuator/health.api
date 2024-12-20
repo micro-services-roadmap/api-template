@@ -1,0 +1,19 @@
+info(
+    desc: "服务-健康检查"
+    author: "alice52"
+    email: "zzhang_xz@163.com"
+)
+
+type HealthCheckResp {
+    appstatus string `json:"appstatus"`
+    rdsstatus string `json:"rdsstatus"`
+    kvstatus string `json:"kvstatus"`
+}
+@server(
+    group: server/actuator
+    prefix: /api/actuator/health
+)
+service app-api {
+    @handler HealthCheck
+    get /add-collection returns (HealthCheckResp)
+}
