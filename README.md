@@ -1,5 +1,9 @@
 ## biz
 
+1. 修改 go.mod 文件: 仓库地址
+    - `wordpress-plus/api-app` --> `wordpress-plus/api-kol`
+2. 依赖 `rpc-tracing` 服务
+
 ## develop
 
 1. 设置私有仓库

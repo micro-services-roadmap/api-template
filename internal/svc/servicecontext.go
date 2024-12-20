@@ -20,7 +20,6 @@ type ServiceContext struct {
 	// tracing 模块
 	TracingViewService    tracingviewservice.TracingViewService
 	TracingIPService      tracingipservice.TracingIPService
-	TracingConsoleService tracingconsoleservice.TracingConsoleService
 }
 
 func NewServiceContext(c config.Config) *ServiceContext {
@@ -32,6 +31,5 @@ func NewServiceContext(c config.Config) *ServiceContext {
 
 		TracingViewService:    tracingviewservice.NewTracingViewService(trackingClient),
 		TracingIPService:      tracingipservice.NewTracingIPService(trackingClient),
-		TracingConsoleService: tracingconsoleservice.NewTracingConsoleService(trackingClient),
 	}
 }
