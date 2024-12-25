@@ -3,12 +3,13 @@ package main
 import (
 	"flag"
 	"fmt"
-	"github.com/wordpress-plus/api-app/doc/swagger"
-	"github.com/wordpress-plus/api-app/internal/config"
-	"github.com/wordpress-plus/api-app/internal/handler"
-	"github.com/wordpress-plus/api-app/internal/middleware/gmw"
-	"github.com/wordpress-plus/api-app/internal/svc"
+	"github.com/wordpress-plus/app-api/doc/swagger"
+	"github.com/wordpress-plus/app-api/internal/middleware/gmw"
 	"os"
+
+	"github.com/wordpress-plus/app-api/internal/config"
+	"github.com/wordpress-plus/app-api/internal/handler"
+	"github.com/wordpress-plus/app-api/internal/svc"
 
 	"github.com/zeromicro/go-zero/core/conf"
 	"github.com/zeromicro/go-zero/rest"
@@ -23,27 +24,25 @@ func init() {
 		configFile = "etc/app-api-local.yaml"
 	}
 	fmt.Println("use config: " + configFile)
+	conf.MustLoad(configFile, &config.C)
 }
 
 func main() {
 	flag.Parse()
 
-	var c config.Config
-	conf.MustLoad(configFile, &c)
-
-	server := rest.MustNewServer(c.RestConf)
+	server := rest.MustNewServer(config.C.RestConf)
 	defer server.Stop()
 
-	svc.SvcCtx = svc.NewServiceContext(c)
+	svc.SvcCtx = svc.NewServiceContext(config.C)
 
 	// mw: logger
-	// server.Use(gmw.NewAddLogMiddleware(ctx).Handle)
+	server.Use(gmw.NewAddLogMiddleware(svc.SvcCtx).Handle)
 	server.Use(gmw.NewAuthMiddleware(svc.SvcCtx).Handle)
-	server.Use(gmw.NewRecordOpsMiddleware(svc.SvcCtx).Handle)
+	//server.Use(gmw.NewRecordOpsMiddleware(svc.SvcCtx).Handle)
 
 	handler.RegisterHandlers(server, svc.SvcCtx)
-	swagger.RegisterSwagger(c.Mode, server)
+	swagger.RegisterSwagger(config.C.Mode, server)
 
-	fmt.Printf("Starting server at %s:%d...\n", c.Host, c.Port)
+	fmt.Printf("Starting server at %s:%d...\n", config.C.Host, config.C.Port)
 	server.Start()
 }

@@ -2,7 +2,7 @@ package gmw
 
 import (
 	"bytes"
-	"github.com/wordpress-plus/api-app/internal/svc"
+	"github.com/wordpress-plus/app-api/internal/svc"
 	"github.com/zeromicro/go-zero/core/logx"
 	"io"
 	"net/http"

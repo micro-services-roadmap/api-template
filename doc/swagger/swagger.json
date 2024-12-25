@@ -16,7 +16,7 @@
     "application/json"
   ],
   "paths": {
-    "/api/actuator/health/add-collection": {
+    "/api/actuator/health": {
       "get": {
         "operationId": "HealthCheck",
         "responses": {

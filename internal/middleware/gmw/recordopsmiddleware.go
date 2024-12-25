@@ -2,13 +2,10 @@ package gmw
 
 import (
 	"bytes"
-	"context"
 	"github.com/micro-services-roadmap/kit-common/ipx"
-	"github.com/micro-services-roadmap/oneid-core/modelo"
-	"github.com/wordpress-plus/api-app/internal/svc"
-	"github.com/wordpress-plus/rpc-tracing/pbtms"
+	"github.com/wordpress-plus/app-api/internal/svc"
+	//"github.com/wordpress-plus/rpc-tracing/pbtms"
 	"github.com/zeromicro/go-zero/core/logx"
-	"github.com/zeromicro/go-zero/core/trace"
 	"github.com/zeromicro/go-zero/rest/httpx"
 	"io"
 	"net/http"
@@ -47,35 +44,35 @@ func (m *RecordOpsMiddleware) Handle(next http.HandlerFunc) http.HandlerFunc {
 		// 打印响应日志
 		logx.WithContext(r.Context()).Infof("Response: %s %s %s duration: %d", r.Method, r.RequestURI, string(recorder.body), time.Since(startTime))
 
-		go func(tq *pbtms.ViewAddReq, startTime time.Time) {
-			tq.Cost = time.Since(startTime).Milliseconds()
-			if _, err := m.svcCtx.TracingViewService.ViewAdd(context.Background(), tq); err != nil {
-				logx.Errorf("Failed to TracingViewService-ViewAdd: %v", err)
-			}
-		}(buildTraceAddReq(r, trace.TraceIDFromContext(r.Context()), trace.SpanIDFromContext(r.Context()), string(reqBody), string(recorder.body)), startTime)
+		//go func(tq *pbtms.ViewAddReq, startTime time.Time) {
+		//	tq.Cost = time.Since(startTime).Milliseconds()
+		//	if _, err := m.svcCtx.TracingViewService.ViewAdd(context.Background(), tq); err != nil {
+		//		logx.Errorf("Failed to TracingViewService-ViewAdd: %v", err)
+		//	}
+		//}(buildTraceAddReq(r, trace.TraceIDFromContext(r.Context()), trace.SpanIDFromContext(r.Context()), string(reqBody), string(recorder.body)), startTime)
 	}
 }
 
-func buildTraceAddReq(r *http.Request, traceID, spanID, req, resp string) *pbtms.ViewAddReq {
-	p := &pbtms.ViewAddReq{
-		Utype:     0,
-		IP:        GetRemoteAddr(r),
-		Url:       r.RequestURI,
-		UserAgent: r.Header.Get("User-Agent"),
-		TraceID:   traceID,
-		SpanID:    spanID,
-		Method:    r.Method,
-		Response:  resp,
-		Request:   req,
-	}
-	if uid, ok := r.Context().Value(modelo.ID).(int64); ok {
-		p.Uid = uid
-	}
-	if uname, uok := r.Context().Value(modelo.Name).(string); uok {
-		p.Uname = uname
-	}
-	return p
-}
+//func buildTraceAddReq(r *http.Request, traceID, spanID, req, resp string) *pbtms.ViewAddReq {
+//	p := &pbtms.ViewAddReq{
+//		Utype:     0,
+//		IP:        GetRemoteAddr(r),
+//		Url:       r.RequestURI,
+//		UserAgent: r.Header.Get("User-Agent"),
+//		TraceID:   traceID,
+//		SpanID:    spanID,
+//		Method:    r.Method,
+//		Response:  resp,
+//		Request:   req,
+//	}
+//	if uid, ok := r.Context().Value(modelo.ID).(int64); ok {
+//		p.Uid = uid
+//	}
+//	if uname, uok := r.Context().Value(modelo.Name).(string); uok {
+//		p.Uname = uname
+//	}
+//	return p
+//}
 
 const xRealIP = "X-Real-IP"
 

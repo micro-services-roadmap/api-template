@@ -4,7 +4,7 @@ import (
 	"context"
 	"github.com/micro-services-roadmap/oneid-core/modelo"
 	"github.com/micro-services-roadmap/oneid-core/utilo"
-	"github.com/wordpress-plus/api-app/internal/svc"
+	"github.com/wordpress-plus/app-api/internal/svc"
 	"github.com/zeromicro/go-zero/core/logx"
 	"net/http"
 )

@@ -11,9 +11,9 @@ type HealthCheckResp {
 }
 @server(
     group: server/actuator
-    prefix: /api/actuator/health
+    prefix: /api/actuator
 )
 service app-api {
     @handler HealthCheck
-    get /add-collection returns (HealthCheckResp)
+    get /health returns (HealthCheckResp)
 }
