@@ -38,7 +38,7 @@ jobs:
       - run: git config --global url.https://$GH_PRIVATE_TOKEN@github.com/.insteadOf https://github.com/
 
       - name: Cache dependencies
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         with:
           path: |
             ${{ env.GOPATH }}/pkg/mod
