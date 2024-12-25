@@ -68,6 +68,8 @@ github.com/micro-services-roadmap/kit-common v1.0.2 h1:0380q8lyiiz/or3T+L87CHJFq
 github.com/micro-services-roadmap/kit-common v1.0.2/go.mod h1:kMCX4SNCF3rqgMdu3/jKj/mhVjJ35MGpn4loW05mGDw=
 github.com/micro-services-roadmap/oneid-core v0.2.9 h1:dcmlRFbN1aru7Fm809b8qfgCL59bOy6T7lqPX7w9qvg=
 github.com/micro-services-roadmap/oneid-core v0.2.9/go.mod h1:G3aw4zipsj6Vd1+shDjJfSO7t/MxFfq+068StmebXWs=
+github.com/micro-services-roadmap/oneid-core v0.3.0 h1:QWGm6+xWh+xOog9IaV7jFDr5agdKfpQypSEC56t3jg0=
+github.com/micro-services-roadmap/oneid-core v0.3.0/go.mod h1:GCpJNoHIQkmi9tO0q6ZgX3u7kjkArONH3ROlVrm6Qeo=
 github.com/mitchellh/mapstructure v1.5.0 h1:jeMsZIYE/09sWLaz43PL7Gy6RuMjD2eJVyuac5Z2hdY=
 github.com/mitchellh/mapstructure v1.5.0/go.mod h1:bFUtVrKA4DC2yAKiSyO/QUcy7e+RRV2QTWOzhPopBRo=
 github.com/munnerz/goautoneg v0.0.0-20191010083416-a7dc8b61c822 h1:C3w9PqII01/Oq1c1nUAm88MOHcQC9l5mIlSMApZMrHA=

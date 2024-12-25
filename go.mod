@@ -4,7 +4,7 @@ go 1.22.7
 
 require (
 	github.com/micro-services-roadmap/kit-common v1.0.2
-	github.com/micro-services-roadmap/oneid-core v0.2.9
+	github.com/micro-services-roadmap/oneid-core v0.3.0
 	github.com/zeromicro/go-zero v1.7.4
 )
 
