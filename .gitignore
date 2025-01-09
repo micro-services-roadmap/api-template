@@ -18,5 +18,7 @@
 !*.toml
 !Dockerfile
 !*.tpl
+!*.api
+!*.http
 !.deploy
 !.gitmodules
